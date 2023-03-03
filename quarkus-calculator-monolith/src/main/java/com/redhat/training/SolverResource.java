@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.redhat.training.service.SolverService;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,10 @@ public class SolverResource implements SolverService {
 
     static final Pattern multiplyPattern = Pattern.compile("(.+)\\*(.+)");
     static final Pattern addPattern = Pattern.compile("(.+)\\+(.+)");
+    static final Pattern subtractPattern = Pattern.compile("(.+)-(.+)");
+
+    @ConfigProperty(name = "features.subtract-enabled")
+    private boolean subtractEnabled;
 
     @Override
     @GET
@@ -40,6 +45,13 @@ public class SolverResource implements SolverService {
             if (multiplyMatcher.matches()) {
                 return multiply(multiplyMatcher.group(1),multiplyMatcher.group(2));
             }
+
+            if(subtractEnabled){
+                Matcher subMatcher = subtractPattern.matcher(equation);
+                if(subMatcher.matches()){
+                    return subtract(subMatcher.group(1), subMatcher.group(2));
+                }
+            }
             
             throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Unable to parse: "+equation).build());
         }
@@ -53,5 +65,10 @@ public class SolverResource implements SolverService {
     public Float multiply(String lhs, String rhs){
         log.info("Multiplying {} to {}" ,lhs, rhs);
         return solve(lhs)*solve(rhs);
+    }
+
+    public Float subtract(String lhs, String rhs){
+        log.info("Subtracting {} from {}", rhs, lhs);
+        return solve(lhs)-solve(rhs);
     }
 }
