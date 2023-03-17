@@ -80,8 +80,8 @@
           <execution>
             <goals>
               <goal>build</goal>
-              <!-- <goal>generate-code</goal>
-              <goal>generate-code-tests</goal> -->
+              <goal>generate-code</goal>
+              <goal>generate-code-tests</goal>
             </goals>
           </execution>
         </executions>
@@ -89,11 +89,11 @@
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${compiler-plugin.version}</version>
-        <!-- <configuration>
+        <configuration>
           <compilerArgs>
             <arg>-parameters</arg>
           </compilerArgs>
-        </configuration> -->
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
