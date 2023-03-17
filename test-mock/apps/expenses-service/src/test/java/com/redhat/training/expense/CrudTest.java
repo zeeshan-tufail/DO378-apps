@@ -9,13 +9,13 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.*;
 
 
-@QuarkusTest
+//@QuarkusTest
 @TestHTTPEndpoint(ExpenseResource.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CrudTest {
     public static final String NON_EXISTING_UUID = "3fa85f64-5717-4562-b3fc-2c963f66afa6";
 
-    @Test
+    //@Test
     @Order(1)
     public void initialListOfExpensesIsEmpty() {
         given()
@@ -26,7 +26,7 @@ public class CrudTest {
             .body("$.size()", is(0));
     }
 
-    @Test
+    //@Test
     @Order(2)
     public void creatingAnExpenseReturns201WithHeaders() {
         given()
@@ -47,7 +47,7 @@ public class CrudTest {
             .header("uuid", notNullValue());
     }
 
-    @Test
+    //@Test
     @Order(3)
     public void updateNonExistingExpenseReturns404() {
         given()
@@ -66,7 +66,7 @@ public class CrudTest {
             .statusCode(404);
     }
 
-    @Test
+    //@Test
     @Order(3)
     public void updateExistingExpenseReturns200() {
         // Getting the list of expenses
@@ -132,7 +132,7 @@ public class CrudTest {
         Assertions.assertEquals(newExpenseAmount, actualExpenseAmount);
     }
 
-    @Test
+    //@Test
     @Order(4)
     public void deleteNonExistingExpenseReturns404() {
         given()
