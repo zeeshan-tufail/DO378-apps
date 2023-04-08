@@ -8,7 +8,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import java.util.Set;
 
-
+@Path("/expenses")
+@RegisterRestClient
 public interface ExpenseServiceClient {
 
     @GET
