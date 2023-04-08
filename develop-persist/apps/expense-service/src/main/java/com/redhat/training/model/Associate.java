@@ -13,13 +13,19 @@ import javax.persistence.OneToMany;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 // TODO: Add @Entity annotation and extend PanacheEntity
-public class Associate {
+@Entity
+public class Associate extends PanacheEntity{
+    
     public String name;
 
     // TODO: Add one to many relationship between associate and expenses
+    @OneToMany(mappedBy = "associate", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonbTransient
     public List<Expense> expenses = new ArrayList<>();
 
     // TODO: Add a default constructor
+    public Associate() {
+    }
 
     public Associate(String name) {
         this.name = name;

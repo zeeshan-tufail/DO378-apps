@@ -21,7 +21,8 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import org.hibernate.annotations.Type;
 
 // TODO: Add @Entity annotation and extend PanacheEntity
-public class Expense {
+@Entity
+public class Expense extends PanacheEntity{
 
     public enum PaymentMethod {
         CASH, CREDIT_CARD, DEBIT_CARD,
@@ -38,12 +39,18 @@ public class Expense {
     public BigDecimal amount;
 
     // TODO: Add many-to-one relationship between expense and associate
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "associate_id", insertable = false,updatable = false)
+    @JsonbTransient
     public Associate associate;
 
      // TODO: Annotate the associateId with @Column
+     @Column(name = "associate_id")
     public Long associateId;
 
     // TODO: Add a default constructor
+    public Expense() {
+    }
 
     public Expense(UUID uuid, String name, LocalDateTime creationDate,
             PaymentMethod paymentMethod, String amount, Associate associate) {
@@ -54,6 +61,7 @@ public class Expense {
         this.amount = new BigDecimal(amount);
         this.associate = associate;
         // TODO: Add associateId association
+        this.associateId = associate.id;
     }
 
     public Expense(String name, PaymentMethod paymentMethod, String amount, Associate associate) {
@@ -62,11 +70,22 @@ public class Expense {
 
     @JsonbCreator
     public static Expense of(String name, PaymentMethod paymentMethod, String amount, Long associateId) {
-
         // TODO: Update regarding the new relationship
-        return new Expense(name, paymentMethod, amount, null);
+        return Associate.<Associate>findByIdOptional(associateId)
+            .map(associate -> new Expense(name, paymentMethod, amount,associate))
+            .orElseThrow(RuntimeException::new);
     }
 
     // TODO: Add update() method
+    public static void update(final Expense expense){
+        Optional<Expense> previous = Expense.findByIdOptional(expense.id);
+        previous.ifPresentOrElse((update) -> {
+            update.amount = expense.amount;
+            update.name = expense.name;
+            update.paymentMethod = expense.paymentMethod;
+            update.uuid = expense.uuid;
+            update.persist();
+        }, () -> {throw  new WebApplicationException(Response.Status.NOT_FOUND);} );
+    }
 
 }

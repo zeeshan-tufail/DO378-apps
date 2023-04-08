@@ -32,30 +32,43 @@ public class ExpenseResource {
     @GET
     // TODO 1: Implement with a call to "listAll()" of Expense entity.
     // TODO 2: Add pagination and sort by "amount" and "associateId".
-    public List<Expense> list() {
-        return null;
+    public List<Expense> list(@DefaultValue("3") @QueryParam("pageSize") int pageSize, 
+                              @DefaultValue("1") @QueryParam("pageNum") int pageNum) {
+        
+        PanacheQuery<Expense> query = Expense.findAll(Sort.by("amount").and("associateId"));
+
+        return query.page(Page.of(pageNum-1, pageSize)).list();
+        // return Expense.listAll();
     }
 
     @POST
     // TODO: Make the method transactional
+    @Transactional
     public Expense create(final Expense expense) {
         Expense newExpense = Expense.of(expense.name, expense.paymentMethod,
                 expense.amount.toString(), expense.associateId);
         // TODO: Use the "persist()" method of the entity.
-
+        newExpense.persist();
         return newExpense;
     }
 
     @DELETE
     @Path("{uuid}")
     // TODO: Make the method transactional
+    @Transactional
     public void delete(@PathParam("uuid") final UUID uuid) {
         // TODO: Use the "delete()" method of the entity and list the expenses
+        long numExpenseDeleted = Expense.delete("uuid", uuid);
+        if (numExpenseDeleted == 0) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
     }
 
     @PUT
     // TODO: Make the method transactional
+    @Transactional
     public void update(final Expense expense) {
         // TODO: Use the "update()" method of the entity.
+        Expense.update(expense);
     }
 }
