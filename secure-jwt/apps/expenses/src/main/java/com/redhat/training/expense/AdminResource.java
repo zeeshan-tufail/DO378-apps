@@ -15,6 +15,7 @@ public class AdminResource {
 
     @GET
     @Path( "/expenses" )
+    @RolesAllowed(value = {"ADMIN"})
     public List<Expense> listAllExpenses() {
         return expenses.list();
     }

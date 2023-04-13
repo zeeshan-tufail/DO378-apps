@@ -12,6 +12,10 @@ public class JwtGenerator {
     public static String generateJwtForRegularUser( String username ) {
         return Jwt.issuer( ISSUER )
                 .upn( username + "@example.com" )
+                .subject(username)
+                .audience("expenses.example.com")
+                .claim("locale", "en_US")
+                .groups(new HashSet<>(Arrays.asList("USER")))
                 .sign();
     }
 
@@ -20,6 +24,7 @@ public class JwtGenerator {
                 .upn( username + "@example.com" )
                 .subject( username )
                 .claim( "locale", "en_US" )
+                .groups(new HashSet<>(Arrays.asList("USER","ADMIN")))
                 .sign();
     }
 }
