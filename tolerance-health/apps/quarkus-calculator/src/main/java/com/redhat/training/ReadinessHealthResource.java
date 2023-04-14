@@ -7,7 +7,19 @@ import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.Readiness;
 
 @ApplicationScoped
-public class ReadinessHealthResource {
+@Readiness
+public class ReadinessHealthResource implements HealthCheck {
 
     private final String HEALTH_CHECK_NAME = "Readiness";
+    private int counter = 0;
+
+    @Override
+    public HealthCheckResponse call() {
+
+        return ++counter >= 10 ? HealthCheckResponse.up(HEALTH_CHECK_NAME)
+                : HealthCheckResponse.down(HEALTH_CHECK_NAME);
+
+        // TODO Auto-generated method stub
+        // throw new UnsupportedOperationException("Unimplemented method 'call'");
+    }
 }
