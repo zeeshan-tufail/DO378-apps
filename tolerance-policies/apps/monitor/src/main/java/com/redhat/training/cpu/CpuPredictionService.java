@@ -11,6 +11,7 @@ public class CpuPredictionService {
     private int callCount = 0;
     private long lastCallTime = 0;
 
+    @CircuitBreaker(requestVolumeThreshold = 6, failureRatio = 0.5, delay = 3000)
     public Double predictSystemLoad() {
         callCount++;
 

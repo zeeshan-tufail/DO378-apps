@@ -16,6 +16,7 @@ public class CpuStatsService {
     private int callCount = 0;
     List<Double> series;
 
+    @Fallback(fallbackMethod = "getCpuStatsWithMissingValues")
     public CpuStats getCpuStats() {
         series = getCpuUsageTimeSeries();
         var mean = calculateMean( series );
@@ -67,5 +68,8 @@ public class CpuStatsService {
 
         return Math.sqrt( deviations / series.size() );
     }
+    public CpuStats getCpuStatsWithMissingValues() {
+        return new CpuStats( series, 0.0, 0.0 );
+        }
 
 }
