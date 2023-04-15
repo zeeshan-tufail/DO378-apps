@@ -1,0 +1,8 @@
+2023-04-15 15:32:30,232 INFO  [Timing.java] expenses 1.0.0-SNAPSHOT on JVM (powered by Quarkus 2.13.5.Final-redhat-00003) started in 1.538s. Listening on: http://localhost:8080
+2023-04-15 15:32:30,242 INFO  [Timing.java] Profile dev activated. Live Coding activated.
+2023-04-15 15:32:30,244 INFO  [Timing.java] Installed features: [cdi, kubernetes, resteasy-reactive, resteasy-reactive-jackson, smallrye-context-propagation, vertx]
+2023-04-15 15:32:30,248 INFO  [RuntimeUpdatesProcessor.java] Live reload total time: 1.581s 
+2023-04-15 15:32:30,259 DEBUG [ExpensesResource.java] Getting expensejoel-2
+2023-04-15 15:47:05,670 INFO  [RuntimeUpdatesProcessor.java] File change detected: D:\Docs_Software\MiscDocs\RedHat_OpenShift\DO378\GitSource\DO378-apps\monitor-logging\apps\expenses\src\main\resources\application.properties
+2023-04-15 15:47:05,690 INFO  [RuntimeUpdatesProcessor.java] Restarting quarkus due to changes in application.properties.
+2023-04-15 15:47:05,710 INFO  [Timing.java] expenses stopped in 0.015s
