@@ -21,18 +21,30 @@ public class ExpenseResource {
     @Inject
     public ExpenseService expenseService;
 
+    private final StopWatch stopWatch = StopWatch.createStarted();
+
+    @Inject
+    public MeterRegistry registry;
+
     @PostConstruct
     public void initMeters() {
+        //registry.counter("callsToGetExpenses", Tags.of("description", "Return a list of expenses"));
+        //registry.counter("callsToPostExpenses", Tags.of("description", "Create a expense."));
+        registry.gauge("timeSinceLastGetExpenses", Tags.of("description", "Time since the last call to GET /expenses"), stopWatch, StopWatch::getTime);
     }
 
     @GET
-    public Set<Expense> list() {
+    @Counted(value = "callsToGetExpenses")
+    public Set<Expense> list() {  
+        stopWatch.reset();
+        stopWatch.start();      
         return expenseService.list();
     }
 
     @POST
     public Expense create(Expense expense) {
-        return expenseService.create(expense);
+        registry.counter("callsToPostExpenses").increment();
+        return registry.timer("expenseCreationTime").wrap((Supplier<Expense>) () -> expenseService.create(expense)).get();
     }
 
     @DELETE
